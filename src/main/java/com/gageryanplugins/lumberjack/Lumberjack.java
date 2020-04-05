@@ -15,7 +15,7 @@ public class Lumberjack extends JavaPlugin implements Listener {
 
         final Logger logger = this.getLogger(); // Part of the update checker
 
-        new UpdateChecker(this, 12345).getVersion(version -> { // Update checker
+        new UpdateChecker(this, 64657).getVersion(version -> { // Update checker
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                 logger.info("There is not a new update available.");
             } else {
