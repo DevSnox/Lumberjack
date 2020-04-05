@@ -5,27 +5,27 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Lumberjack extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-    	
-    	Logger logger = this.getLogger(); // Part of the update checker
-    	 
+
+        final Logger logger = this.getLogger(); // Part of the update checker
+
         new UpdateChecker(this, 12345).getVersion(version -> { // Update checker
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                 logger.info("There is not a new update available.");
             } else {
                 logger.info("There is a new update available.");
             }
-        }); 	
-    	
-        String minVersion = "1.13.0";
+        });
 
-        if(!isServerVersionHigherOrEqual(minVersion, this.getServer().getBukkitVersion().split("-")[0])) {
+        final String minVersion = "1.13.0";
+
+        if (!this.isServerVersionHigherOrEqual(minVersion, this.getServer().getBukkitVersion().split("-")[0])) {
             this.getLogger().log(Level.SEVERE, "Your server version is not supported! " +
                     "Plugin needs at least server version " + minVersion + " to work!");
             this.getPluginLoader().disablePlugin(this);
@@ -33,30 +33,30 @@ public class Lumberjack extends JavaPlugin implements Listener {
         }
 
         // Create config-file
-        createConfig();
+        this.createConfig();
 
         // Register Listener
-        getServer().getPluginManager().registerEvents(new BlockListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new BlockListener(this), this);
     }
 
     private void createConfig() {
-        if(!this.getDataFolder().exists()) getDataFolder().mkdirs();
+        if (!this.getDataFolder().exists()) this.getDataFolder().mkdirs();
 
-        if (!new File(getDataFolder(), "config.yml").exists()) {
-            getLogger().info("Config.yml not found, creating!");
-            saveDefaultConfig();
+        if (!new File(this.getDataFolder(), "config.yml").exists()) {
+            this.getLogger().info("Config.yml not found, creating!");
+            this.saveDefaultConfig();
             return;
         }
 
-        getLogger().info("Config.yml found, loading!");
+        this.getLogger().info("Config.yml found, loading!");
 
         // Converter for config version 1 -> newest version is 2
-        if(!getConfig().isSet("config-version")) {
+        if (!this.getConfig().isSet("config-version")) {
 
-            List<String> oldTools = getConfig().getStringList("tools");
+            final List<String> oldTools = this.getConfig().getStringList("tools");
 
-            for(int i = 0; i < oldTools.size(); i++) {
-                String tool = oldTools.get(i);
+            for (int i = 0; i < oldTools.size(); i++) {
+                final String tool = oldTools.get(i);
 
                 switch (tool) {
                     case "wooden":
@@ -79,23 +79,23 @@ public class Lumberjack extends JavaPlugin implements Listener {
 
             this.getLogger().log(Level.INFO, "Changed configuration to version 2! Now supporting all materials as tools.");
 
-            getConfig().set("config-version", 2);
+            this.getConfig().set("config-version", 2);
         }
     }
 
-    private boolean isServerVersionHigherOrEqual(String minVersion, String serverVersion) {
-        String[] minParts = minVersion.split("\\.");
-        String[] serverParts = serverVersion.split("\\.");
+    private boolean isServerVersionHigherOrEqual(final String minVersion, final String serverVersion) {
+        final String[] minParts = minVersion.split("\\.");
+        final String[] serverParts = serverVersion.split("\\.");
 
-        for(int i = 0; i < 2; i++) {
-            if(!isHigherOrEqual(minParts[i], serverParts[i])) return false;
+        for (int i = 0; i < 2; i++) {
+            if (!this.isHigherOrEqual(minParts[i], serverParts[i])) return false;
         }
 
         return true;
     }
 
-    private boolean isHigherOrEqual(String min, String check) {
-        if(Integer.parseInt(check) >= Integer.parseInt(min)) return true;
+    private boolean isHigherOrEqual(final String min, final String check) {
+        if (Integer.parseInt(check) >= Integer.parseInt(min)) return true;
         return false;
     }
 }
