@@ -25,7 +25,7 @@ public class BlockListener implements Listener {
         this.plugin.getConfig().getStringList("tools").forEach(tool -> {
 
             if(!isMaterialValid(tool)) {
-                Bukkit.getConsoleSender().sendMessage("Error while loading tools list; Fallowing tool skipped: " + tool);
+                Bukkit.getConsoleSender().sendMessage("Error while loading tools list; Following tool skipped: " + tool);
                 Bukkit.getConsoleSender().sendMessage("Please verify the material name and correct it.");
                 return;
             }
@@ -39,7 +39,7 @@ public class BlockListener implements Listener {
         Player player = event.getPlayer();
 
         // Check if player has permission
-        if (!player.hasPermission("lumberjack.use")) return; //TODO: Add no permissions message
+        if (!player.hasPermission("lumberjack.use")) return; //TODO: Add no permissions message Ryan: Why? That would get annoying very quickly
 
         // Check if tool is allowed
         if (!allowedTools.contains(player.getInventory().getItemInMainHand().getType())) return;

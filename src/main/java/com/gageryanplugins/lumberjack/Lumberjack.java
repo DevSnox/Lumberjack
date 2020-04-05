@@ -12,6 +12,17 @@ public class Lumberjack extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+    	
+    	Logger logger = this.getLogger(); // Part of the update checker
+    	 
+        new UpdateChecker(this, 12345).getVersion(version -> { // Update checker
+            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                logger.info("There is not a new update available.");
+            } else {
+                logger.info("There is a new update available.");
+            }
+        }); 	
+    	
         String minVersion = "1.13.0";
 
         if(!isServerVersionHigherOrEqual(minVersion, this.getServer().getBukkitVersion().split("-")[0])) {
