@@ -16,7 +16,7 @@ public class Lumberjack extends JavaPlugin implements Listener {
         final Logger logger = this.getLogger(); // Part of the update checker
 
         new UpdateChecker(this, 64657).getVersion(version -> { // Update checker
-            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+            if (this.isHigherOrEqual(this.getDescription().getVersion(), version)) {
                 logger.info("There is not a new update available.");
             } else {
                 logger.info("There is a new update available.");
@@ -25,7 +25,7 @@ public class Lumberjack extends JavaPlugin implements Listener {
 
         final String minVersion = "1.13.0";
 
-        if (!this.isServerVersionHigherOrEqual(minVersion, this.getServer().getBukkitVersion().split("-")[0])) {
+        if (!this.isVersionHigherOrEqual(minVersion, this.getServer().getBukkitVersion().split("-")[0])) {
             this.getLogger().log(Level.SEVERE, "Your server version is not supported! " +
                     "Plugin needs at least server version " + minVersion + " to work!");
             this.getPluginLoader().disablePlugin(this);
@@ -83,11 +83,13 @@ public class Lumberjack extends JavaPlugin implements Listener {
         }
     }
 
-    private boolean isServerVersionHigherOrEqual(final String minVersion, final String serverVersion) {
+    private boolean isVersionHigherOrEqual(final String minVersion, final String targetVersion) {
         final String[] minParts = minVersion.split("\\.");
-        final String[] serverParts = serverVersion.split("\\.");
+        final String[] serverParts = targetVersion.split("\\.");
 
         for (int i = 0; i < 2; i++) {
+            System.out.println(minParts[i]);
+            System.out.println(serverParts[i]);
             if (!this.isHigherOrEqual(minParts[i], serverParts[i])) return false;
         }
 
